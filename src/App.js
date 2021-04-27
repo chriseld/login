@@ -13,13 +13,9 @@ function App() {
       <button id="login" onClick={() => setLogin(true)}>Login</button>
       <button id="register" onClick={() => setRegister(true)}>Register</button>
 
-      <LoginModal title="Login" onClose={() => setLogin(false)} show={login}>
-        <p>LoginModal content</p>
-      </LoginModal>
+      <LoginModal onClose={() => setLogin(false)} show={login} />
 
-      <RegisterModal title="Register" onClose={() => setRegister(false)} show={register}>
-        <p>RegisterModal content</p>
-      </RegisterModal>
+      <RegisterModal onClose={() => setRegister(false)} show={register} />
    </div>
   );
 }
