@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import {LoginModal} from './Components/LoginModal';
 import {RegisterModal} from './Components/RegisterModal';

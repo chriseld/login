@@ -1,17 +1,23 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import axios from 'axios';
 
-const RegisterSchema = Yup.object().shape({
-  email: Yup.string().email().required("Email is required"),
-  username: Yup.string()
-  .required("Username is required")
-  .min(4, "Username is too short - should be 4 chars min")
-  .max(20, 'Must be 20 characters or fewer'),
-  password: Yup.string()
-    .required("Password is required")
-    .min(4, "Password is too short - should be 4 chars min")
-});
+async function validateEmail(value) {
+    let error;
+    if(!value) {
+        error = 'Email required'
+    } else if(!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+        error = 'Invalid email address';
+    } else if(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+        const registered = await axios.get('http://localhost:9000/emailcheck?email=' + value);
+        console.log(registered);
+        if(registered.data === true) {
+            error = 'email already in use';
+        }
+    }
+    console.log(error);
+    return error;
+}
 
 const initialValues = {
   email: "",
@@ -23,7 +29,6 @@ const RegisterForm = () => {
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={RegisterSchema}
       onSubmit={(values) => {
         console.log(values);
       }}
@@ -42,6 +47,7 @@ const RegisterForm = () => {
                   className={
                     errors.email && touched.email ? "input-error" : null
                   }
+                  validate={validateEmail}
                 />
                 <br />
                 <ErrorMessage name="email" component="span" className="error" />
