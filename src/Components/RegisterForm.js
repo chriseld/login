@@ -10,13 +10,53 @@ async function validateEmail(value) {
         error = 'Invalid email address';
     } else if(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
         const registered = await axios.get('http://localhost:9000/emailcheck?email=' + value);
-        console.log(registered);
         if(registered.data === true) {
             error = 'email already in use';
         }
     }
-    console.log(error);
     return error;
+}
+
+async function validateUsername(value) {
+    let error;
+    if(!value) {
+        error = 'Username required'
+    } else if(value.length > 25 || value.length < 5) {
+        error = 'Username must be between 5 and 25 characters'
+    } else if(!/^(?=[a-zA-Z0-9]{5,25}$)(?!.*[_.]{2})[^_.].*[^_.]$/i.test(value)) {
+        error = 'Username contains invalid characters'
+    } else if(/^(?=[a-zA-Z0-9]{5,25}$)(?!.*[_.]{2})[^_.].*[^_.]$/i.test(value)) {
+        const registered = await axios.get('http://localhost:9000/usernamecheck?username=' + value);
+        if(registered.data === true) {
+            error = 'Username already in use';
+        }
+    }
+
+    return error;
+}
+
+async function validatePassword(value) {
+    let error;
+    if(!value) {
+        error = 'Password required'
+    } else if(value.length > 25 || value.length < 6) {
+        error = 'Password must be between 6 and 25 characters';
+    }
+
+    return error;
+}
+
+async function registerUser(values) {
+    const email = values.email;
+    const username = values.username;
+    const password = values.password;
+    const userRegistered = await axios.get('http://localhost:9000/registeruser?email=' + email + '&username=' + username + '&password=' + password);
+    if(userRegistered.data === "Success") {
+        alert("Thank you for registering!");
+        window.location.reload();
+    } else {
+        alert("Something went wrong. Please try again.");
+    }
 }
 
 const initialValues = {
@@ -30,7 +70,7 @@ const RegisterForm = () => {
     <Formik
       initialValues={initialValues}
       onSubmit={(values) => {
-        console.log(values);
+        registerUser(values);
       }}
     >
       {(formik) => {
@@ -61,6 +101,7 @@ const RegisterForm = () => {
                   className={
                     errors.username && touched.username ? "input-error" : null
                   }
+                  validate={validateUsername}
                 />
                 <br />
                 <ErrorMessage
@@ -79,6 +120,7 @@ const RegisterForm = () => {
                   className={
                     errors.password && touched.password ? "input-error" : null
                   }
+                  validate={validatePassword}
                 />
                 <br />
                 <ErrorMessage
