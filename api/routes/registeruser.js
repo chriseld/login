@@ -8,10 +8,21 @@ router.get('/', function(req, res, next) {
     const email = req.query.email;
     const username = req.query.username;
     const password = req.query.password;
-    con.query("INSERT INTO users (username, email, password) VALUES ('" + username + "', '" + email + "', '" + password + "' )", function (err, result, fields) {
+
+    // const hashedPassword = async () => {await bcrypt.hash(password, saltRounds, function(err, hash) {
+    //     if(err) {
+    //         console.log(err);
+    //     }
+    // })};
+
+    bcrypt.hash(password, saltRounds, function(err, hash) {
+        con.query("INSERT INTO users (username, email, password) VALUES ('" + username + "', '" + email + "', '" + hash + "' )", function (err, result, fields) {
         if (err) throw err;
         res.send("Success")
     })
+    });
+
+    
 });
 
 module.exports = router;
