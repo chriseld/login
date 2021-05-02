@@ -9,12 +9,6 @@ router.get('/', function(req, res, next) {
     const username = req.query.username;
     const password = req.query.password;
 
-    // const hashedPassword = async () => {await bcrypt.hash(password, saltRounds, function(err, hash) {
-    //     if(err) {
-    //         console.log(err);
-    //     }
-    // })};
-
     bcrypt.hash(password, saltRounds, function(err, hash) {
         con.query("INSERT INTO users (username, email, password) VALUES ('" + username + "', '" + email + "', '" + hash + "' )", function (err, result, fields) {
         if (err) throw err;
