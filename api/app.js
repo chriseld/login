@@ -12,6 +12,9 @@ var testAPIRouter = require('./routes/testAPI');
 var emailcheckRouter = require('./routes/emailcheck');
 var usernamecheckRouter = require('./routes/usernamecheck');
 var registeruserRouter = require('./routes/registeruser');
+var getuserbyemailRouter = require('./routes/getuserbyemail');
+var loginuserRouter = require('./routes/loginuser');
+var passwordcompareRouter = require('./routes/passwordcompare');
 var app = express();
 
 // view engine setup
@@ -31,6 +34,9 @@ app.use('/testAPI', testAPIRouter);
 app.use('/emailcheck', emailcheckRouter);
 app.use('/usernamecheck', usernamecheckRouter);
 app.use('/registeruser', registeruserRouter);
+app.use('/getuserbyemail', getuserbyemailRouter);
+app.use('/loginuser', loginuserRouter);
+app.use('/passwordcompare', passwordcompareRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

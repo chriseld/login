@@ -1,10 +1,58 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import axios from 'axios';
+
+let loggedin = false;
+
+async function validateLoginEmail(value) {
+    let error;
+
+    if(!value) {
+        error = 'Must provide an email address'
+    } else if(!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+        error = 'Invalid email address';
+    }
+
+    return error
+}
+
+async function validateLoginPassword(value) {
+    let error;
+
+    if(!value) {
+        error = 'Must provide a password'
+    }
+
+    return error
+}
+
+async function loginUser(values) {
+    const email = values.email;
+    const password = values.password;
+
+    const user = await axios.get('http://localhost:9000/getuserbyemail?email=' + email);
+
+    if(user.data !== "User not found") {
+        const validated = await axios.get('http://localhost:9000/passwordcompare?password=' + password + '&hash=' + user.data.password);
+        console.log(validated);
+        if(validated.data === true) {
+            await axios.get('http://localhost:9000/loginuser?idusers=' + user.data.idusers);
+            loggedin = true;
+        } else {
+            alert("Email or password invalid");
+        }
+    } else {
+        alert("Email or password invalid");
+    }
+}
 
 const initialValues = {
-  email: "",
-  password: ""
+  email: localStorage.getItem("email") || "",
+  password: "",
+  remember: false
 };
+
+
 
 const LoginForm = () => {
   return (
@@ -12,6 +60,14 @@ const LoginForm = () => {
       initialValues={initialValues}
       onSubmit={(values) => {
         console.log(values);
+
+        if(values.remember === true) {
+            localStorage.setItem("email", values.email);
+        } else {
+            localStorage.removeItem("email");
+        }
+
+        loginUser(values);
       }}
     >
       {(formik) => {
@@ -28,6 +84,7 @@ const LoginForm = () => {
                   className={
                     errors.email && touched.email ? "input-error" : null
                   }
+                  validate={validateLoginEmail}
                 />
                 <br />
                 <ErrorMessage name="email" component="span" className="error" />
@@ -42,6 +99,7 @@ const LoginForm = () => {
                   className={
                     errors.password && touched.password ? "input-error" : null
                   }
+                  validate={validateLoginPassword}
                 />
                 <br />
                 <ErrorMessage
@@ -51,6 +109,14 @@ const LoginForm = () => {
                 />
               </div>
                   <br />
+            
+                <label>
+                    Remember my email: 
+                    <Field type="checkbox" name="remember" />
+                </label>
+
+                <br />
+
               <button
                 type="submit"
                 className={!(dirty && isValid) ? "disabled-btn" : ""}
