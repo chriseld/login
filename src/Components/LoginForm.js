@@ -2,7 +2,12 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import axios from 'axios';
 
-let loggedin = false;
+import { useDispatch } from 'react-redux';
+import { login } from '../actions/login';
+
+import { allReducers } from '../reducers';
+
+import store from '../Components/store';
 
 async function validateLoginEmail(value) {
     let error;
@@ -26,7 +31,22 @@ async function validateLoginPassword(value) {
     return error
 }
 
+function FlipState() {
+    const dispatch = useDispatch();
+    console.log('here');
+    return(
+        (()=> dispatch({type:'LOG_IN'}))
+    )
+}
+
+function stateLogin() {
+    return {
+        type: 'LOG_IN'
+    }
+}
+
 async function loginUser(values) {
+
     const email = values.email;
     const password = values.password;
 
@@ -37,7 +57,7 @@ async function loginUser(values) {
         console.log(validated);
         if(validated.data === true) {
             await axios.get('http://localhost:9000/loginuser?idusers=' + user.data.idusers);
-            loggedin = true;
+            store.dispatch(stateLogin());
         } else {
             alert("Email or password invalid");
         }
@@ -46,10 +66,18 @@ async function loginUser(values) {
     }
 }
 
+function checkRememberState() {
+    if(localStorage.getItem("email")) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 const initialValues = {
   email: localStorage.getItem("email") || "",
   password: "",
-  remember: false
+  remember: checkRememberState()
 };
 
 
