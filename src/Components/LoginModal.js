@@ -1,7 +1,7 @@
 import React from 'react'
 import { LoginForm } from './LoginForm';
 
-
+import store from './store';
 import './modal.css';
 
 function LoginModal(props) {

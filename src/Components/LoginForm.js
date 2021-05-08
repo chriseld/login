@@ -1,4 +1,5 @@
-import React from "react";
+import {React } from "react";
+import { useSelector } from 'react-redux';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import axios from 'axios';
 
@@ -31,14 +32,6 @@ async function validateLoginPassword(value) {
     return error
 }
 
-function FlipState() {
-    const dispatch = useDispatch();
-    console.log('here');
-    return(
-        (()=> dispatch({type:'LOG_IN'}))
-    )
-}
-
 function stateLogin() {
     return {
         type: 'LOG_IN'
@@ -58,6 +51,8 @@ async function loginUser(values) {
         if(validated.data === true) {
             await axios.get('http://localhost:9000/loginuser?idusers=' + user.data.idusers);
             store.dispatch(stateLogin());
+            
+
         } else {
             alert("Email or password invalid");
         }
@@ -80,84 +75,99 @@ const initialValues = {
   remember: checkRememberState()
 };
 
+const LoginDisplay = () => {
+    return (
+        <Formik
+          initialValues={initialValues}
+          onSubmit={(values) => {
+    
+            if(values.remember === true) {
+                localStorage.setItem("email", values.email);
+            } else {
+                localStorage.removeItem("email");
+            }
+    
+            loginUser(values);
+          }}
+        >
+          {(formik) => {
+            const { errors, touched, isValid, dirty } = formik;
+            return (
+              <div className="container">
+                <Form>
+                  <div className="form-row">
+                    <label htmlFor="email">Email: </label>
+                    <Field
+                      type="email"
+                      name="email"
+                      id="loginEmail"
+                      className={
+                        errors.email && touched.email ? "input-error" : null
+                      }
+                      validate={validateLoginEmail}
+                    />
+                    <br />
+                    <ErrorMessage name="email" component="span" className="error" />
+                  </div>
+                      <br />
+                  <div className="form-row">
+                    <label htmlFor="password">Password: </label>
+                    <Field
+                      type="password"
+                      name="password"
+                      id="loginPassword"
+                      className={
+                        errors.password && touched.password ? "input-error" : null
+                      }
+                      validate={validateLoginPassword}
+                    />
+                    <br />
+                    <ErrorMessage
+                      name="password"
+                      component="span"
+                      className="error"
+                    />
+                  </div>
+                      <br />
+                
+                    <label>
+                        Remember my email: 
+                        <Field type="checkbox" name="remember" />
+                    </label>
+    
+                    <br />
+    
+                  <button
+                    type="submit"
+                    className={!(dirty && isValid) ? "disabled-btn" : ""}
+                    disabled={!(dirty && isValid)}
+                  >
+                    Sign In
+                  </button>
+                </Form>
+              </div>
+            );
+          }}
+        </Formik>
+      );
+}
 
+const ThanksDisplay = () => {
+    return(
+        <h3>Thank you for logging in!</h3>
+    )
+}
 
 const LoginForm = () => {
-  return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={(values) => {
-        console.log(values);
+    
+    const isLogged = useSelector(state => state.isLogged);
 
-        if(values.remember === true) {
-            localStorage.setItem("email", values.email);
-        } else {
-            localStorage.removeItem("email");
-        }
-
-        loginUser(values);
-      }}
-    >
-      {(formik) => {
-        const { errors, touched, isValid, dirty } = formik;
-        return (
-          <div className="container">
-            <Form>
-              <div className="form-row">
-                <label htmlFor="email">Email: </label>
-                <Field
-                  type="email"
-                  name="email"
-                  id="loginEmail"
-                  className={
-                    errors.email && touched.email ? "input-error" : null
-                  }
-                  validate={validateLoginEmail}
-                />
-                <br />
-                <ErrorMessage name="email" component="span" className="error" />
-              </div>
-                  <br />
-              <div className="form-row">
-                <label htmlFor="password">Password: </label>
-                <Field
-                  type="password"
-                  name="password"
-                  id="loginPassword"
-                  className={
-                    errors.password && touched.password ? "input-error" : null
-                  }
-                  validate={validateLoginPassword}
-                />
-                <br />
-                <ErrorMessage
-                  name="password"
-                  component="span"
-                  className="error"
-                />
-              </div>
-                  <br />
-            
-                <label>
-                    Remember my email: 
-                    <Field type="checkbox" name="remember" />
-                </label>
-
-                <br />
-
-              <button
-                type="submit"
-                className={!(dirty && isValid) ? "disabled-btn" : ""}
-                disabled={!(dirty && isValid)}
-              >
-                Sign In
-              </button>
-            </Form>
-          </div>
-        );
-      }}
-    </Formik>
-  );
+    if(isLogged) {
+        return ThanksDisplay();
+    } else {
+        return LoginDisplay();
+    };
+  
 };
 
 export { LoginForm }
