@@ -10,4 +10,12 @@ const allReducers = combineReducers({
     userrole
 });
 
-export { allReducers };
+const rootReducer = (state, action) => {
+    if(action.type === 'LOG_OUT') {
+        state = undefined;
+    }
+    
+    return allReducers(state, action);
+}
+
+export { rootReducer };
