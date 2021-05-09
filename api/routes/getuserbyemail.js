@@ -4,7 +4,7 @@ var con = require('./DbConnection');
 
 router.get('/', function(req, res, next) {
     const email = req.query.email.toLowerCase();
-    con.query("SELECT * FROM users WHERE LOWER(email)='" + email + "'", function (err, result, fields) {
+    con.query("SELECT * FROM users WHERE active = 1 AND LOWER(email)='" + email + "'", function (err, result, fields) {
         if (err) throw err;
         try {if(result[0].idusers > 0) {
             res.send(result[0]);

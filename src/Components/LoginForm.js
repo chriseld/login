@@ -38,6 +38,22 @@ function stateLogin() {
     }
 }
 
+function stateUser(user) {
+    console.log(user);
+    return {
+        type: 'userObject',
+        payload: user
+    }
+}
+
+function getUsername(user) {
+    return {
+        type: 'getUsername',
+        payload: user
+    }
+}
+
+
 async function loginUser(values) {
 
     const email = values.email;
@@ -47,11 +63,11 @@ async function loginUser(values) {
 
     if(user.data !== "User not found") {
         const validated = await axios.get('http://localhost:9000/passwordcompare?password=' + password + '&hash=' + user.data.password);
-        console.log(validated);
         if(validated.data === true) {
             await axios.get('http://localhost:9000/loginuser?idusers=' + user.data.idusers);
             store.dispatch(stateLogin());
-            
+            // getUser(user);
+            store.dispatch(getUsername(user.data.username));
 
         } else {
             alert("Email or password invalid");
@@ -152,9 +168,10 @@ const LoginDisplay = () => {
       );
 }
 
-const ThanksDisplay = () => {
+const ThanksDisplay = (username) => {
+    
     return(
-        <h3>Thank you for logging in!</h3>
+        <h3>Thank you for logging in, {username}</h3>
     )
 }
 
@@ -162,8 +179,11 @@ const LoginForm = () => {
     
     const isLogged = useSelector(state => state.isLogged);
 
+    const username = useSelector(state => state.username);
+    console.log(username);
+
     if(isLogged) {
-        return ThanksDisplay();
+        return ThanksDisplay(username);
     } else {
         return LoginDisplay();
     };
