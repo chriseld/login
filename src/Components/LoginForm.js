@@ -53,6 +53,27 @@ function getUsername(user) {
     }
 }
 
+function getUserid(user) {
+    return {
+        type: 'getUserid',
+        payload: user
+    }
+}
+
+function getUseremail(user) {
+    return {
+        type: 'getUseremail',
+        payload: user
+    }
+}
+
+function getUserrole(user) {
+    return {
+        type: 'getUserrole',
+        payload: user
+    }
+}
+
 
 async function loginUser(values) {
 
@@ -68,6 +89,9 @@ async function loginUser(values) {
             store.dispatch(stateLogin());
             // getUser(user);
             store.dispatch(getUsername(user.data.username));
+            store.dispatch(getUserid(user.data.idusers));
+            store.dispatch(getUseremail(user.data.email));
+            store.dispatch(getUserrole(user.data.role));
 
         } else {
             alert("Email or password invalid");
@@ -180,7 +204,6 @@ const LoginForm = () => {
     const isLogged = useSelector(state => state.isLogged);
 
     const username = useSelector(state => state.username);
-    console.log(username);
 
     if(isLogged) {
         return ThanksDisplay(username);

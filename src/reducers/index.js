@@ -1,10 +1,13 @@
 import isLogged from './user';
 import { combineReducers } from 'redux';
-import { username } from './userInfo';
+import { username, userid, useremail, userrole } from './userInfo';
 
 const allReducers = combineReducers({
     isLogged,
-    username
+    username,
+    userid,
+    useremail,
+    userrole
 });
 
 export { allReducers };
