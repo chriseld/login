@@ -1,16 +1,3 @@
-// const userObject = (user) => {
-//     console.log(user);
-//     if(type = 'userObj') {
-//         return{
-//             user
-//         }
-//     }
-// }
-
-// export default userObject;
-
-const initialValues = null;
-
 function reduce(initialValues, action) {
     console.log(action.payload);
     switch(action.type) {

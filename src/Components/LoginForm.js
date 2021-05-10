@@ -3,11 +3,6 @@ import { useSelector } from 'react-redux';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import axios from 'axios';
 
-import { useDispatch } from 'react-redux';
-import { login } from '../actions/login';
-
-import { allReducers } from '../reducers';
-
 import store from '../Components/store';
 
 async function validateLoginEmail(value) {
@@ -35,14 +30,6 @@ async function validateLoginPassword(value) {
 function stateLogin() {
     return {
         type: 'LOG_IN'
-    }
-}
-
-function stateUser(user) {
-    console.log(user);
-    return {
-        type: 'userObject',
-        payload: user
     }
 }
 

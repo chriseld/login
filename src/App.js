@@ -1,15 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 
 import './App.css';
 import {LoginModal} from './Components/LoginModal';
 import {RegisterModal} from './Components/RegisterModal';
-
-import { login, logout } from './actions';
-import { allReducers } from './reducers';
-
-import { store } from './Components/store';
+import {ProfileModal} from './Components/ProfileModal';
 
 function App() {
 
@@ -18,6 +14,7 @@ function App() {
 
   const [login, setLogin] = useState(false);
   const [register, setRegister] = useState(false);
+  const [profile, setProfile] = useState(false);
 
   const homeGuest = () => {
     return(
@@ -30,7 +27,10 @@ function App() {
 
   const homeUser = () => {
     return(
+      <>
       <button onClick={(()=> dispatch({type:'LOG_OUT'}))}>Log Out</button>
+      <button id='profileBtn'onClick={() => setProfile(true)}>Profile</button>
+      </>
     )
   }
 
@@ -53,8 +53,8 @@ function App() {
       {/* <button onClick={(()=> dispatch({type:'LOG_IN'}))}>FLIP STATE</button> */}
 
       <LoginModal onClose={() => setLogin(false)} show={login} />
-
       <RegisterModal onClose={() => setRegister(false)} show={register} />
+      <ProfileModal onClose={() => setProfile(false)} show={profile} />
    </div>
   );
 }

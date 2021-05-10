@@ -1,16 +1,17 @@
-import React from 'react'
-import { LoginForm } from './LoginForm';
+import React from 'react';
+import { ProfileForm } from './ProfileForm'
+
 import './modal.css';
 
-function LoginModal(props) {
+function ProfileModal(props) {
     return (
         <div className={`modal ${props.show ? 'show' : ''}`} onClick={props.onClose}>
             <div className="modal-content" onClick={e => e.stopPropagation()}>
                 <div className="modal-header">
-                    <h4 className="modal-title">Login</h4>
+                    <h4 className="modal-title">Profile</h4>
                 </div>
                 <div className="modal-body">
-                    <LoginForm />
+                    <ProfileForm />
                 </div>
                 <div className="modal-footer">
                     <button className="button" onClick={props.onClose}>close</button>
@@ -19,4 +20,4 @@ function LoginModal(props) {
         </div>
     )}
 
-export {LoginModal}
+export {ProfileModal}
