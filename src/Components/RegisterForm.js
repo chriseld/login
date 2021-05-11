@@ -52,7 +52,8 @@ async function registerUser(values) {
     const password = values.password;
     const userRegistered = await axios.get('http://localhost:9000/registeruser?email=' + email + '&username=' + username + '&password=' + password);
     if(userRegistered.data === "Success") {
-        alert("Thank you for registering!");
+        await axios.get('http://localhost:9000/mailer?email=' + email + '&subject=Thank you!&html=Thank you for registering, ' + username + '!');
+        alert("Thank you for registering! A confirmation will be sent to your email address.");
         window.location.reload();
     } else {
         alert("Something went wrong. Please try again.");

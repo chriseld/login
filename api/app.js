@@ -15,6 +15,7 @@ var registeruserRouter = require('./routes/registeruser');
 var getuserbyemailRouter = require('./routes/getuserbyemail');
 var loginuserRouter = require('./routes/loginuser');
 var passwordcompareRouter = require('./routes/passwordcompare');
+var mailerRouter = require('./routes/mailer');
 var app = express();
 
 // view engine setup
@@ -37,6 +38,7 @@ app.use('/registeruser', registeruserRouter);
 app.use('/getuserbyemail', getuserbyemailRouter);
 app.use('/loginuser', loginuserRouter);
 app.use('/passwordcompare', passwordcompareRouter);
+app.use('/mailer', mailerRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
