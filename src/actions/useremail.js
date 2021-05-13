@@ -1,6 +1,6 @@
 const useremail = (userData) => {
     return {
-        type: 'getuseremail',
+        type: 'getUseremail',
         payload: userData
     }
 }

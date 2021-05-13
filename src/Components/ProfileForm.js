@@ -1,4 +1,7 @@
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import axios from 'axios';
 import { useSelector } from 'react-redux';
+import EmailChangeForm from './emailChangeForm';
 
 const ProfileForm = () => {
     
@@ -13,7 +16,14 @@ const ProfileForm = () => {
     // };
 
     return(
-        <h3>User Management for {username}</h3>
+        <>
+        <h4>Change email address:</h4>
+        <EmailChangeForm />
+        
+
+        <hr />
+        <h4>Change password:</h4>
+        </>
     )
   
 };
