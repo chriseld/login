@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import store from './store';
+import { RegisterForm } from './RegisterForm';
 
 async function validateEmail(value) {
     let error;
@@ -19,7 +20,6 @@ async function validateEmail(value) {
 }
 
 function updateUseremail(email) {
-    console.log(email);
     return {
         type: 'getUseremail',
         payload: email
@@ -29,6 +29,7 @@ function updateUseremail(email) {
 async function UpdateEmail(values, id) {
     const email = values.email;
     store.dispatch(updateUseremail(email));
+    alert("Your email has been changed!")
     const updateEmail = await axios.get('http://localhost:9000/updateuseremail?email=' + email + '&id=' + id);
 }
 
@@ -46,8 +47,9 @@ const EmailChangeForm = () => {
         <p>Current email: {currentEmail}</p>
         <Formik
           initialValues={initialValues}
-          onSubmit={(values) => {
+          onSubmit={(values, {resetForm}) => {
             UpdateEmail(values, userid);
+            resetForm();
           }}
         >
           {(formik) => {
