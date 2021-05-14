@@ -2,6 +2,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import EmailChangeForm from './emailChangeForm';
+import PasswordChangeForm from './passwordChangeForm';
 
 const ProfileForm = () => {
     
@@ -19,10 +20,9 @@ const ProfileForm = () => {
         <>
         <h4>Change email address:</h4>
         <EmailChangeForm />
-        
-
         <hr />
         <h4>Change password:</h4>
+        <PasswordChangeForm />
         </>
     )
   
