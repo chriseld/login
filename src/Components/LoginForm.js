@@ -94,7 +94,7 @@ function checkRememberState() {
     } else {
         return false;
     }
-}
+};
 
 const initialValues = {
   email: localStorage.getItem("email") || "",

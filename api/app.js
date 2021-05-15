@@ -18,6 +18,7 @@ var passwordcompareRouter = require('./routes/passwordcompare');
 var mailerRouter = require('./routes/mailer');
 var updateuseremailRouter = require('./routes/updateuseremail');
 var updateuserpasswordRouter = require('./routes/updateuserpassword');
+var forgotpasswordRouter = require('./routes/forgotpassword');
 var app = express();
 
 // view engine setup
@@ -43,6 +44,7 @@ app.use('/passwordcompare', passwordcompareRouter);
 app.use('/mailer', mailerRouter);
 app.use('/updateuseremail', updateuseremailRouter);
 app.use('/updateuserpassword', updateuserpasswordRouter);
+app.use('/forgotpassword', forgotpasswordRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
